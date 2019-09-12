@@ -13,8 +13,12 @@ class PDFController {
 
     static create(req, res, next) {
         const { id: userId } = req.decode
-        const { title, url } = req.body
-        PDF.create({ title, url, owner: userId })
+        let url = null
+        if (req.file){
+            url = req.file.cloudStoragePublicUrl
+        }
+        const {title, description} = req.body
+        PDF.create({ title, url, owner: userId ,description})
             .then((newPDF) => {
                 res.status(201).json(newPDF)
             })

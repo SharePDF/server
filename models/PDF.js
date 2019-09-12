@@ -19,8 +19,8 @@ const PDFSchema = new Schema({
 PDFSchema.pre('save', function (next) {
     if (this.url && !this.title) {
         this.title = this.url.split('/').pop()
-        this.title = this.title.substring(0, this.title.length - 4)
     }
+    next()
 })
 
 const PDF = mongoose.model('PDF', PDFSchema)

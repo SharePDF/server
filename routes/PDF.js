@@ -6,4 +6,8 @@ Router.use(Authenthication)
 Router.get('/', PDFController.read)
 Router.post('/', PDFController.create)
 
+// ! Require Authorization
+Router.put('/:id', PDFController.update)
+Router.delete('/:id', PDFController.delete)
+
 module.exports = Router;

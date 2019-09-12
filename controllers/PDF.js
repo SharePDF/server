@@ -22,10 +22,9 @@ class PDFController {
     };
 
     static update(req, res, next) {
-        // * Change the fields and delete this line
-        const { fields, id } = req.body
-        // * Change the fields and delete this line
-        PDF.updateOne({ _id: id }, { fields }, { runValidators: true })
+        const { id } = req.params
+        const { title, description } = req.body
+        PDF.update({ _id: id }, { $set: { title, description } }, { runValidators: true })
             .then((updatedPDF) => {
                 res.status(200).json(updatedPDF)
             })
@@ -34,7 +33,7 @@ class PDFController {
 
     static delete(req, res, next) {
         // * Change the fields and delete this line
-        const { id } = req.body
+        const { id } = req.params
         PDF.delete({
             _id: id
         })

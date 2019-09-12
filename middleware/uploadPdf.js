@@ -20,10 +20,10 @@ const sendUploadToGCS = (req, res, next) => {
   if (!req.file) {
     return next()
   }
-  else if (!req.file.mimetype.includes('image')) {
-    throw({
+  else if (!req.file.originalname.match(/.+\.pdf$/gi)) {
+    throw ({
       status: 406,
-      message: "File type should be image"
+      message: "File type should be pdf"
     })
   }
 
@@ -52,7 +52,7 @@ const sendUploadToGCS = (req, res, next) => {
   stream.end(req.file.buffer)
 }
 
-async function deleteFile(req,res,next,url) {
+async function deleteFile(req, res, next, url) {
 
   // let filename = req.body.link
   // console.log("masuk ke delete file gcs")
@@ -63,26 +63,26 @@ async function deleteFile(req,res,next,url) {
       .bucket(CLOUD_BUCKET)
       .file(filename)
       .delete();
-      res.status(200).json({
+    res.status(200).json({
       message: "successfully deleted in storage"
     })
   }
   catch{
     // res.status(500).json("hapus bro")
     // console.log("masuk ke catch")
-    next({status:500, message :"error when deleting the file on google cloud storage"})
+    next({ status: 500, message: "error when deleting the file on google cloud storage" })
   }
 
 }
 
 const Multer = require('multer')
 const multer = Multer({
-    storage: Multer.MemoryStorage,
-    limits: {
-      fileSize: 5 * 1024 * 1024
-    }
-    
-  })
+  storage: Multer.MemoryStorage,
+  limits: {
+    fileSize: 5 * 1024 * 1024
+  }
+
+})
 
 module.exports = {
   getPublicUrl,

@@ -5,7 +5,8 @@ const Authorization = require('../middleware/authorization')
 const { sendUploadToGCS, multer } = require("../middleware/uploadPdf")
 
 Router.use(Authenthication)
-Router.get('/', PDFController.read)
+Router.get('/', PDFController.readAll)
+Router.get('/user', PDFController.read)
 Router.post('/', multer.single("pdf"), sendUploadToGCS, PDFController.create)
 
 // ! Require Authorization

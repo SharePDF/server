@@ -10,6 +10,15 @@ class PDFController {
             })
             .catch(next);
     };
+    
+    static readAll(req, res, next){
+
+        PDF.find().populate("owner")
+        .then(allpdf=>{
+            res.status(200).json(allpdf)
+        })
+        .catch(next)
+    }
 
     static create(req, res, next) {
         const { id: userId } = req.decode

@@ -1,18 +1,26 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema
+const ObjectId = Schema.Types.ObjectId
 
 const PDFSchema = new Schema({
-    title: { type: String },
+    title: String,
     url: {
         type: String,
-        match: [/.+\.pdf$/i, "File is not a PDF"]
+        // match: [/.+\.pdf$/i, "URL does not contain PDF"],
+        // required: [true, 'URL is empty']
     },
-    owner: { type: String }
+    description: {
+        type: String,
+        default: "No Description"
+    },
+    owner: ObjectId
 }, { timestamps: true })
 
 PDFSchema.pre('save', function (next) {
-    if (!this.title) this.title = this.url.split('/').pop()
-    next()
+    if (this.url && !this.title) {
+        this.title = this.url.split('/').pop()
+        this.title = this.title.substring(0, this.title.length - 4)
+    }
 })
 
 const PDF = mongoose.model('PDF', PDFSchema)

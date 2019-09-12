@@ -2,8 +2,9 @@ const PDF = require('../models/PDF');
 
 class PDFController {
     static read(req, res, next) {
+        const { id: userId } = req.decode
         // * Filter should be placed here as well
-        PDF.find({})
+        PDF.find({ owner: userId })
             .then((PDFs) => {
                 res.status(200).json(PDFs)
             })
@@ -11,11 +12,9 @@ class PDFController {
     };
 
     static create(req, res, next) {
-        const { _id: userId } = req.decode
-        // * Change the fields and delete this line
-        const { fields } = req.body
-        // * Change the fields and delete this line
-        PDF.create({ fields })
+        const { id: userId } = req.decode
+        const { title, url } = req.body
+        PDF.create({ title, url, owner: userId })
             .then((newPDF) => {
                 res.status(201).json(newPDF)
             })

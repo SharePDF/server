@@ -13,7 +13,7 @@ class PDFController {
     
     static readAll(req, res, next){
 
-        PDF.find().populate("owner")
+        PDF.find().sort({createdAt:"desc"}).populate("owner")
         .then(allpdf=>{
             res.status(200).json(allpdf)
         })
@@ -47,13 +47,12 @@ class PDFController {
     static delete(req, res, next) {
         // * Change the fields and delete this line
         const { id } = req.params
-        PDF.delete({
-            _id: id
+        console.log(id)
+        PDF.findByIdAndDelete(id)
+        .then(deletedPdf=>{
+            res.status(200).json(deletedPdf)
         })
-            .then((deletedPDF) => {
-                res.status(200).json(deletedPDF)
-            })
-            .catch(next);
+        .catch(next)
     };
 
 }

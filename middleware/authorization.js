@@ -1,7 +1,7 @@
 const PDF = require('../models/PDF')
 
 module.exports = (req, res, next) => {
-    const PDFId = req.params.PDFId
+    const PDFId = req.params.id
     const userId = req.decode.id
     PDF.findById(PDFId)
         .then((PDF) => {

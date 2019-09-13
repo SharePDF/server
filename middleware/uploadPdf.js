@@ -21,8 +21,8 @@ const sendUploadToGCS = (req, res, next) => {
     return next()
   }
   else if (!req.file.originalname.match(/.+\.pdf$/gi)) {
-    throw ({
-      status: 406,
+    next({
+      status: 400,
       message: "File type should be pdf"
     })
   }

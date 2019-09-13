@@ -1,5 +1,6 @@
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 	require('dotenv').config()
+	console.log("environment: " + process.env.NODE_ENV)
 }
 
 const express = require('express')
@@ -9,12 +10,14 @@ const routes = require('./routes')
 const errorHandler = require('./middleware/errorHandler')
 const mongoose = require("mongoose")
 const cors = require('cors')
-const db = process.env.MONGODB || "default"
+const db = process.env.MONGODB
 
 
-mongoose.connect("mongodb://localhost:27017/" + db, { useNewUrlParser: true })
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => console.log('Connected to MongoDB: ' + db))
 	.catch((err) => {
+		console.log("database_name",db)
+		console.log(err)
 		console.log("failed to connect to MongoDB")
 		// * console.log(err)
 	})

@@ -1,5 +1,5 @@
 const PDF = require('../models/PDF');
-
+const ISO6391 = require('iso-639-1')
 class PDFController {
     static read(req, res, next) {
         const { id: userId } = req.decode
@@ -21,13 +21,20 @@ class PDFController {
     }
 
     static create(req, res, next) {
+
+        let language = null
+        if (req.body.language){
+            let code = req.body.language
+            language = ISO6391.getName(code)
+        }
+        
         const { id: userId } = req.decode
         let url = null
         if (req.file){
             url = req.file.cloudStoragePublicUrl
         }
         const {title, description} = req.body
-        PDF.create({ title, url, owner: userId ,description})
+        PDF.create({ title, url, owner: userId ,description,language})
             .then((newPDF) => {
                 res.status(201).json(newPDF)
             })

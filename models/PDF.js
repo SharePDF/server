@@ -13,7 +13,13 @@ const PDFSchema = new Schema({
         type: String,
         default: "No Description"
     },
-    owner: ObjectId
+    owner: {
+        type: ObjectId,
+        ref: "User"
+    },
+    language : {
+        type : String
+    }
 }, { timestamps: true })
 
 PDFSchema.pre('save', function (next) {

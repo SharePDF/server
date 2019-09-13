@@ -1,5 +1,7 @@
 // require('dotenv').config()
 const urlToFileName = require('../helpers/urlToFileName')
+const fs = require('fs');
+const pdf = require('pdf-parse');
 
 const { Storage } = require('@google-cloud/storage')
 
@@ -17,10 +19,23 @@ const getPublicUrl = (filename) => {
 
 const sendUploadToGCS = (req, res, next) => {
   // console.log(req.file ,"masuk ke upload GCS")
+  // console.log(req.file)
+  // console.log(req.body)
+  // console.log(req.file.mimetype=="application/pdf")
+  const options= {
+    max:10
+  }
+  pdf(req.file.buffer,options)
+  .then((data)=>{
+    // console.log(data.text.length)
+    req.body.text = data.text
+  })
+  .catch(next)
+
   if (!req.file) {
     return next()
   }
-  else if (!req.file.originalname.match(/.+\.pdf$/gi)) {
+  else if (!req.file.originalname.match(/.+\.pdf$/gi) && (req.file.mimetype=="application/pdf")) {
     next({
       status: 400,
       message: "File type should be pdf"
